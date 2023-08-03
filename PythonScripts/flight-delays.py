@@ -16,7 +16,7 @@ schema = StructType([
         StructField("destination", StringType())
 ])
  # Create DataFrame
- df = spark.read.csv("../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv", header=True, schema=schema)
+df = spark.read.csv("../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv", header=True, schema=schema)
 
 # test grouping
 sum_destination_grouped_df = df.groupBy("destination").sum("delay")
