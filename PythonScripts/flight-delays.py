@@ -7,7 +7,7 @@ spark = SparkSession.builder \
     .appName("Flight Delays") \
     .master("local") \
     .getOrCreate()
-
+# Create schema 
 schema = StructType([
     StructField("date", DateType(), True),
         StructField("delay", IntegerType()), 
@@ -15,8 +15,8 @@ schema = StructType([
         StructField("string", StringType()), 
         StructField("destination", StringType())
 ])
-# Now you can start using the DataFrame API
-df = spark.read.csv("../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv", header=True, schema=schema)
+ # Create DataFrame
+ df = spark.read.csv("../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv", header=True, schema=schema)
 
 # test grouping
 sum_destination_grouped_df = df.groupBy("destination").sum("delay")
