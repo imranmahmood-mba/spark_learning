@@ -1,7 +1,14 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DateType
 from pyspark.sql import functions as F
+import os
 
+# Postgres URL
+url = "jdbc:postgresql://localhost:5432/pyspark"
+# Postgres Credentials
+properties = {"user": os.getenv("PG_USER"),
+              "password": os.getenv("PG_PASS"),
+              "driver":"org.postgresql.Driver"}
 # Initialize a SparkSession
 spark = SparkSession.builder \
     .appName("Flight Delays") \
@@ -26,4 +33,4 @@ sum_longest_trip_df = df.groupBy(["origin", "destination"]).agg(F.avg("delay").a
 # Displays the content of the DataFrame to stdout
 sum_destination_grouped_df.show()
 avg_destination_grouped_df.show()
-sum_longest_trip_df.orderBy(["origin", "destination"]).show()
+sum_longest_trip_df.orderBy(["origin", "destination"]).write.jdbc(url=url, table="flight_delay_aggregate", mode="overwrite", properties=properties)
