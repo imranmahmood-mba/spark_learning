@@ -29,7 +29,7 @@ df = spark.read.csv("../LearningSparkV2/databricks-datasets/learning-spark-v2/fl
 sum_destination_grouped_df = df.groupBy("destination").sum("delay")
 avg_destination_grouped_df = df.groupBy("destination").agg(F.avg("delay").alias("avg_delay")).withColumn("avg_delay", F.round(F.col("avg_delay"), 2))
 sum_longest_trip_df = df.groupBy(["origin", "destination"]).agg(F.avg("delay").alias("avg_delay")).withColumn("avg_delay", F.round(F.col("avg_delay"), 2))
-
+df_filtered = df.filter(df.delay > 100).show()
 # Displays the content of the DataFrame to stdout
 sum_destination_grouped_df.show()
 avg_destination_grouped_df.show()

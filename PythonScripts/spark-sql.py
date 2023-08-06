@@ -9,7 +9,7 @@ def mapper(line):
     return Row(ID=int(fields[0]), name=str(fields[1].encode("utf-8")), \
                age=int(fields[2]), numFriends=int(fields[3]))
 
-lines = spark.sparkContext.textFile("fakefriends.csv")
+lines = spark.sparkContext.textFile("../fakefriends.csv")
 people = lines.map(mapper)
 
 # Infer the schema, and register the DataFrame as a table.
