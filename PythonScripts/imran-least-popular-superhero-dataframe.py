@@ -31,10 +31,14 @@ spark = SparkSession.builder.appName('Marvel').master('local').getOrCreate()
 # Read in the hero name dataset
 hero_name_df = spark.createDataFrame(create_hero_names())
 
-# Get hero id of most popular hero
+# Get the number of friends per hero
 df = spark.createDataFrame(get_hero_id())
 df = df.groupBy("heroID").sum("num_of_friends")
+df = df.select(func.col("sum(num_of_friends)").alias("friends"), func.col("heroID").alias("heroID"))
 
-# Filter hero_name_df to get the name
-df_joined = df.join(hero_name_df, "heroID").orderBy(func.desc("sum(num_of_friends)"))
-df_joined.show(1)
+# Get the smallest amount of friends
+friends_min = df.select(func.min("friends")).first()[0]
+
+# Filter hero_name_df to get all heroes with the min number of friends
+df_joined = df.join(hero_name_df, "heroID")
+df_joined.filter(df_joined.friends == friends_min).select(df_joined.name).orderBy(df_joined.name).show()
